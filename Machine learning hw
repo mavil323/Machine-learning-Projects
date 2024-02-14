@@ -1,0 +1,60 @@
+import numpy as np
+import pandas as pd
+np.seterr(divide='ignore', invalid='ignore')
+df = int(input("Enter # of rows(m x 2):"))
+X = []
+Y = []
+for i in range(df):
+ Sqft = input("Enter sqft of houses(x):")
+ Price = input("Enter price of houses(y):")
+ X = np.append(X,Sqft)
+ X = X.astype(int)
+ Y = np.append(Y,Price)
+ Y = Y.astype(int)
+b = {'Sqftofhouses':X,'Priceofhouses':Y}
+data = pd.DataFrame(b)
+print(data)
+x_mean = np.mean(X)
+x_mean = x_mean.astype(int)
+y_mean = np.mean(Y) 
+y_mean = y_mean.astype(int)
+#print(x_mean,y_mean)
+#print(X,Y)
+x_x_mean, y_y_mean = X-x_mean , Y-y_mean
+#print(x_x_mean,y_y_mean)
+x_x_mean2 , y_y_mean2 = x_x_mean * x_x_mean , y_y_mean*y_y_mean
+#find the value of m
+m = np.sum((x_x_mean)*(y_y_mean))/np.sum(x_x_mean2)
+#print(m)
+m = m.astype(int)
+m = np.array(m, dtype= np.int64)
+#print(m)
+c = y_mean-(m*x_mean) #calculate the slope
+c = c.astype(int)
+#c = np.array(c, dtype= np.int64)
+m = np.round(m,decimals = 3)
+c = np.round(c,decimals = 3)
+reg_line = 'Y = {} + {} X'.format(m,c)
+print('Regression Line: ',reg_line)
+for i in X:
+ y_list = []
+ y = m*(X)+c
+ y_list.append(y)
+# using the Gradient Descent Method
+m = 0
+c = 0
+iterations = input("Enter interations to perform gradient descent:")# The number of iterations to perform gradient descent
+iterations = int(iterations)
+learningRate = input("Enter Learning rate to perform gradient descent:")
+learningRate = float(learningRate)
+n = float(len(X)) # Number of elements in X
+# Performing Gradient Descent 
+for i in range(iterations): 
+ Y_pred = m*(X) + c # The current predicted value of Y
+ #print(m,X,c)
+ D_m = (-2/n) * sum(X * (Y - Y_pred)) # Derivative wrt m
+ D_c = (-2/n) * sum(Y - Y_pred) # Derivative wrt c
+ m = m - learningRate * D_m # Update m
+ c = c - learningRate * D_c # Update c
+ 
+print ("Theta (θ) values:",m, c)
